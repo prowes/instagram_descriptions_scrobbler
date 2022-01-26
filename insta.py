@@ -27,6 +27,15 @@ class instag():
         webdriver.ActionChains(self.browser).send_keys(Keys.RIGHT).perform()
         return ret
 
+    def create_folder_and_file(self, file_location, amount_of_posts):
+        if not os.path.exists(file_location):
+            os.mkdir(file_location)
+        f = open(rf"{file_location}\\content.txt", "w+", encoding="utf-8")
+        for i in range (0, amount_of_posts):
+            f.write(self.get_text())
+            print (f"{i} out of {amount_of_posts}")
+        f.close()
+
     def main(self):  # todo: refactor this to small methods
         self.username = input("Please enter username:\n")
         self.password = getpass()  # todo: check if incorrect
@@ -43,19 +52,12 @@ class instag():
         self.browser.get(f"https://www.instagram.com/{account_name}/")
 
         self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'g47SY')))  # total posts counter
-        amount_of_posts = int(self.browser.find_element_by_class_name("g47SY").get_attribute('text'))
+        amount_of_posts = int(self.browser.find_element_by_class_name("g47SY").text)
         all_posts = self.browser.find_elements_by_class_name("v1Nh3")
         all_posts[0].click()  # click the first photo
 
-        if not os.path.exists(file_location):
-            os.mkdir(file_location)
-        f = open(rf"{file_location}\\content.txt", "w+", encoding="utf-8")
-        for i in range (0, amount_of_posts):
-            f.write(self.get_text())
-            print (f"{i} out of {amount_of_posts}")
-        f.close()
+        self.create_folder_and_file(file_location, amount_of_posts)
         self.browser.quit()
-
 
 if __name__ == '__main__':
     instag().main()
