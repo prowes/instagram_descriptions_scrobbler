@@ -18,6 +18,7 @@ class instag():
         self.browser.find_element_by_name("username").send_keys(self.username)
         self.browser.find_element_by_name("password").send_keys(self.password)
         self.browser.find_element_by_class_name("Igw0E").click()  # login button
+        #  to do: check the login error (data-test-id: login-error-message)
         self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, '_lz6s')))
 
     def get_text(self):
@@ -39,8 +40,11 @@ class instag():
     def main(self):  # todo: refactor this to small methods
         self.username = input("Please enter username:\n")
         self.password = getpass()  # todo: check if incorrect
-        account_name = input("Please enter the account name:\n")
-        file_location = input("Please enter the desired location for the file name (ie C:\\folder) \n")  # todo: consider different input cases
+        account_name = input("Please enter the account name:\n")  # todo: check if not exist
+        file_location = input("Please enter the desired location for the file name (ie C:\\folder) \n")
+        if ":\\" not in file_location:
+            print("Incorrect file location entered")
+            exit()
 
         self.browser = webdriver.Chrome()
         self.wait = WebDriverWait(self.browser, 10)
