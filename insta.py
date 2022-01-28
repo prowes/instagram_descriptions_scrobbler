@@ -42,6 +42,9 @@ class instag():
         self.password = getpass()  # todo: check if incorrect
         account_name = input("Please enter the account name:\n")  # todo: check if not exist
         file_location = input("Please enter the desired location for the file name (ie C:\\folder) \n")
+        if self.username == "" or self.password == "" or account_name == "" or file_location == "":
+            print("Please check values and try again, something is empty")
+            exit()
         if ":\\" not in file_location:
             print("Incorrect file location entered")
             exit()
