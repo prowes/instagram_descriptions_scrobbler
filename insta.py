@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 from getpass import getpass
 import os, os.path
 
@@ -18,8 +19,16 @@ class instag():
         self.browser.find_element_by_name("username").send_keys(self.username)
         self.browser.find_element_by_name("password").send_keys(self.password)
         self.browser.find_element_by_class_name("Igw0E").click()  # login button
-        #  to do: check the login error (data-test-id: login-error-message)
+        self.check_if_wrong_credentials()
         self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, '_lz6s')))
+
+    def check_if_wrong_credentials(self):
+        try:
+            notification_shown = self.wait_short.until(EC.visibility_of_element_located((By.ID, 'slfErrorAlert')))
+            print("Your credentials are incorrect, please check and try again")
+            quit()
+        except TimeoutException:  # no error is shown
+            pass
 
     def get_text(self):
         self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'C4VMK')))
@@ -37,10 +46,10 @@ class instag():
             print (f"{i} out of {amount_of_posts}")
         f.close()
 
-    def main(self):  # todo: refactor this to small methods
+    def main(self):
         self.username = input("Please enter username:\n")
-        self.password = getpass()  # todo: check if incorrect
-        account_name = input("Please enter the account name:\n")  # todo: check if not exist
+        self.password = getpass()
+        account_name = input("Please enter the account name:\n")
         file_location = input("Please enter the desired location for the file name (ie C:\\folder) \n")
         if self.username == "" or self.password == "" or account_name == "" or file_location == "":
             print("Please check values and try again, something is empty")
@@ -51,6 +60,7 @@ class instag():
 
         self.browser = webdriver.Chrome()
         self.wait = WebDriverWait(self.browser, 10)
+        self.wait_short = WebDriverWait(self.browser, 5)
 
         link = "https://www.instagram.com/"
         self.browser.get(link)
