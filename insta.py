@@ -50,6 +50,9 @@ class instag():
     def main(self):
         self.username = input('Please enter username:\n')
         self.password = getpass()
+        if len(self.password) < 6:
+            print('Password seems to be incorrect, it should have at least 6 symbols, try again')
+            exit()
         account_name = input('Please enter the account name:\n')
         file_location = input('Please enter the desired location for the file name (ie C:\\folder) \n')
         if self.username == '' or self.password == '' or account_name == '' or file_location == '':
