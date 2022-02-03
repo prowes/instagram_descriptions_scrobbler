@@ -19,7 +19,7 @@ class instag():
         self.browser.find_element_by_name('username').send_keys(self.username)
         self.browser.find_element_by_name('password').send_keys(self.password)
 
-        self.browser.find_element_by_class_name('Igw0E').click()  # login button
+        webdriver.ActionChains(self.browser).send_keys(Keys.ENTER).perform()
         self.check_if_wrong_credentials()
         self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, '_lz6s')))
 
@@ -31,17 +31,17 @@ class instag():
         except TimeoutException:  # no error is shown
             pass
 
-    def get_text(self):
+    def get_text(self, i):
         try:
             self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'C4VMK')))
             description = self.browser.find_element_by_class_name('C4VMK')
             print(type(description.text))
-            description_text = description.text.strip('\n')
+            description_text = str.join(" ", description.text.splitlines())
             print(description_text)
         except:
             description_text = ''
             print('the description is empty')
-        ret = (f'{self.browser.current_url},{description_text}\n')
+        ret = (f'{i},{self.browser.current_url},{description_text}\n')
         webdriver.ActionChains(self.browser).send_keys(Keys.RIGHT).perform()
         return ret
 
@@ -49,9 +49,9 @@ class instag():
         if not os.path.exists(self.file_location):
             os.mkdir(self.file_location)
         f = open(rf'{self.file_location}\\content.csv', 'w+', encoding='utf-8')
-        f.write('URL,post description')
+        f.write('Number,URL,post description\n')
         for i in range (0, amount_of_posts):
-            f.write(self.get_text())
+            f.write(self.get_text(i))
             print (f'{i} out of {amount_of_posts}')
         f.close()
 
