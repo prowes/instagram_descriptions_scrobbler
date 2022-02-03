@@ -48,7 +48,7 @@ class instag():
     def create_folder_and_file(self, amount_of_posts):
         if not os.path.exists(self.file_location):
             os.mkdir(self.file_location)
-        f = open(rf'{self.file_location}\\content.csv', 'w+', encoding='utf-8')
+        f = open(rf'{self.file_location}\\content.csv', 'w+', encoding='utf-16')
         f.write('Number,URL,post description\n')
         for i in range (0, amount_of_posts):
             f.write(self.get_text(i))
