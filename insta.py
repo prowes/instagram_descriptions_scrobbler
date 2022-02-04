@@ -83,7 +83,9 @@ class Instag():
                         'accept_cookies': 'aOOlW',
                         'header': '_lz6s',
                         'wrong_credentials_notification': 'slfErrorAlert',
-                        'post_description': 'C4VMK'
+                        'post_description': 'C4VMK',
+                        'posts_counter': 'g47SY',
+                        'all_posts': 'v1Nh3'
                         }
         link = 'https://www.instagram.com/'
         self.browser.get(link)
@@ -91,9 +93,9 @@ class Instag():
         self.login()
         self.browser.get(f'https://www.instagram.com/{self.account_name}/')
 
-        self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'g47SY')))  # total posts counter
-        amount_of_posts = int(self.browser.find_element_by_class_name('g47SY').text)
-        all_posts = self.browser.find_elements_by_class_name('v1Nh3')
+        self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, self.locators['posts_counter'])))
+        amount_of_posts = int(self.browser.find_element_by_class_name(self.locators['posts_counter']).text)
+        all_posts = self.browser.find_elements_by_class_name(self.locators['all_posts'])
         all_posts[0].click()  # click the first photo
 
         self.create_folder_and_file(amount_of_posts)
