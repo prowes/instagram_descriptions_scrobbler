@@ -8,7 +8,7 @@ from getpass import getpass
 import os, os.path
 
 
-class instag():
+class Instag():
     def accept_cookies(self):
         self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'aOOlW')))
         accept_button = self.browser.find_element_by_class_name('aOOlW')
@@ -92,4 +92,4 @@ class instag():
         self.browser.quit()
 
 if __name__ == '__main__':
-    instag().main()
+    Instag().main()
