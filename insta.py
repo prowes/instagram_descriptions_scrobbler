@@ -10,8 +10,8 @@ import os, os.path
 
 class Instag():
     def accept_cookies(self):
-        self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'aOOlW')))
-        accept_button = self.browser.find_element_by_class_name('aOOlW')
+        self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, self.locators['accept_cookies'])))
+        accept_button = self.browser.find_element_by_class_name(self.locators['accept_cookies'])
         accept_button.click()
 
     def login(self):
@@ -21,11 +21,11 @@ class Instag():
 
         webdriver.ActionChains(self.browser).send_keys(Keys.ENTER).perform()
         self.check_if_wrong_credentials()
-        self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, '_lz6s')))
+        self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, self.locators['header'])))
 
     def check_if_wrong_credentials(self):
         try:
-            notification_shown = self.wait_short.until(EC.visibility_of_element_located((By.ID, 'slfErrorAlert')))
+            notification_shown = self.wait_short.until(EC.visibility_of_element_located((By.ID, self.locators['wrong_credentials_notification'])))
             print('Your credentials are incorrect, please check and try again')
             exit()
         except TimeoutException:  # no error is shown
@@ -33,8 +33,8 @@ class Instag():
 
     def get_text(self, i):
         try:
-            self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'C4VMK')))
-            description = self.browser.find_element_by_class_name('C4VMK')
+            self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, self.locators['post_description'])))
+            description = self.browser.find_element_by_class_name(self.locators['post_description'])
             print(type(description.text))
             description_text = str.join(" ", description.text.splitlines())
             print(description_text)
@@ -76,7 +76,12 @@ class Instag():
         self.browser = webdriver.Chrome()
         self.wait = WebDriverWait(self.browser, 10)
         self.wait_short = WebDriverWait(self.browser, 5)
-
+        self.locators = {
+                        'accept_cookies': 'aOOlW',
+                        'header': '_lz6s',
+                        'wrong_credentials_notification': 'slfErrorAlert',
+                        'post_description': 'C4VMK'
+                        }
         link = 'https://www.instagram.com/'
         self.browser.get(link)
         self.accept_cookies()
