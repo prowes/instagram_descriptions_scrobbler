@@ -42,8 +42,10 @@ class Instag():
             description_text = ''
             print('the description is empty')
         ret = (f'{i},{self.browser.current_url},{description_text}\n')
-        webdriver.ActionChains(self.browser).send_keys(Keys.RIGHT).perform()
         return ret
+
+    def go_to_the_next_post(self):
+        webdriver.ActionChains(self.browser).send_keys(Keys.RIGHT).perform()
 
     def create_folder_and_file(self, amount_of_posts):
         if not os.path.exists(self.file_location):
@@ -52,6 +54,7 @@ class Instag():
         f.write('Number,URL,post description\n')
         for i in range (0, amount_of_posts):
             f.write(self.get_text(i))
+            self.go_to_the_next_post()
             print (f'{i} out of {amount_of_posts}')
         f.close()
 
